@@ -3,10 +3,8 @@
 für release auf linux:
 
 -> Main Methode wird benötigt!
-
 -> benötigt eine .csproj datei mit folgendem Inhalt:
   
-
 <Project Sdk="Microsoft.NET.Sdk">
 
 <PropertyGroup>
@@ -23,10 +21,10 @@ für release auf linux:
 
 </Project>
 
-
 Kompilieren & ausführen
 
-––––––––––––––––––––––––
+–––
+
 
 Jetzt kannst du das Programm ausführen oder eine ausführbare Datei erstellen.
 
@@ -56,7 +54,6 @@ dotnet publish -c Release -r linux-x64 --self-contained
 
 --self-contained: Stellt sicher, dass die benötigten .NET-Abhängigkeiten in die Veröffentlichung eingebunden werden, sodass der Code ohne eine installierte .NET-Laufzeit auf anderen Systemen ausgeführt werden kann.
 
-  
   
 
 chmod +x HelloApp
