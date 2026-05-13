@@ -1,4 +1,4 @@
- ls[mise](https://mise.jdx.dev/) ist ein universeller Tool-Manager (ähnlich wie SDKMAN! oder nvm), der in Rust geschrieben und extrem schnell ist. Wir nutzen ihn, um SDKs (Java, Node, Python etc.) außerhalb des Root-Systems zu verwalten.
+e ls[mise](https://mise.jdx.dev/) ist ein universeller Tool-Manager (ähnlich wie SDKMAN! oder nvm), der in Rust geschrieben und extrem schnell ist. Wir nutzen ihn, um SDKs (Java, Node, Python etc.) außerhalb des Root-Systems zu verwalten.
 
 ## 1. Installation (Fedora)
 

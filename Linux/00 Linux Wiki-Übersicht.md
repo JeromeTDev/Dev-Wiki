@@ -2,7 +2,7 @@
 
 - [[linux - Standartbefehle]]
 - [[ncdu]]
-- [[{{Befehl3}}]]
+- [[Btrfs - Snapper Cheat Sheet]]
 - [[{{Befehl4}}]]
 - [[{{Befehl5}}]]
 - [[{{Befehl6}}]]
@@ -10,7 +10,7 @@
 ## 🔹 Szenarien (komplex / zustandsabhängig)
 
 - [[USB Benchmarks]]
-- [[{{Szenario2}}]]
+- [[Rollback auf alten Snapshot]]
 - [[{{Szenario3}}]]
 - [[{{Szenario4}}]]
 - [[{{Szenario5}}]]
