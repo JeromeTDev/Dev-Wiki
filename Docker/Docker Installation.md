@@ -1,210 +1,214 @@
-
-
-```bash
-# =========================================================
 # Docker CLI Cheatsheet
-# Fedora / Linux / CLI-first Workflow
-# =========================================================
+> Fedora / Linux / CLI-first Workflow
 
-# --- Installation (Fedora) ---
-sudo dnf -y install dnf-plugins-core
+## 📦 Installation (Fedora)
 
-sudo dnf config-manager --add-repo \
-https://download.docker.com/linux/fedora/docker-ce.repo
-
-sudo dnf install docker-ce docker-ce-cli containerd.io \
-docker-buildx-plugin docker-compose-plugin
-
-sudo systemctl enable --now docker   # Start Docker daemon
-systemctl status docker              # Check Docker status
-
-sudo usermod -aG docker $USER        # Use docker without sudo
-newgrp docker                        # Reload groups without logout
-
-docker version                       # Show Docker version
-docker info                          # Show Docker system info
-
-# --- Basic Workflow ---
-docker run hello-world               # Test Docker installation
-docker ps                            # Show running containers
-docker ps -a                         # Show all containers
-docker images                        # Show downloaded images
-docker volume ls                     # List volumes
-docker network ls                    # List networks
-
-# --- Running Containers ---
-docker run ubuntu                    # Run Ubuntu container
-docker run -it ubuntu bash           # Interactive Ubuntu shell
-docker run -it alpine sh             # Interactive Alpine shell
-docker run -d nginx                  # Run container detached
-docker run --name myapp nginx        # Assign container name
-docker run -p 8080:80 nginx          # Map ports
-docker run -v $(pwd):/app ubuntu     # Mount current directory
-docker run --rm ubuntu               # Auto-remove container
-docker run -e MY_VAR=test ubuntu     # Set environment variable
-
-# --- Container Management ---
-docker start <container>             # Start stopped container
-docker stop <container>              # Stop container
-docker restart <container>           # Restart container
-docker kill <container>              # Force kill container
-docker rm <container>                # Remove container
-docker rm -f <container>             # Force remove container
-
-docker rename <old> <new>            # Rename container
-
-docker stats                         # Live resource usage
-docker top <container>               # Show processes
-
-# --- Logs & Debugging ---
-docker logs <container>              # Show logs
-docker logs -f <container>           # Follow logs live
-docker inspect <container>           # Detailed JSON info
-docker exec -it <container> bash     # Open shell in running container
-docker exec -it <container> sh       # Alpine shell
-docker attach <container>            # Attach terminal
-
-# --- Images ---
-docker pull nginx                    # Download image
-docker build -t myimage .            # Build image from Dockerfile
-docker build -f Dockerfile.dev .     # Use custom Dockerfile
-docker tag myimage myrepo/myimage    # Tag image
-docker push myrepo/myimage           # Push image to registry
-
-docker rmi <image>                   # Remove image
-docker image prune                   # Remove dangling images
-docker image prune -a                # Remove unused images
-
-# --- Dockerfile ---
-# Example Dockerfile
-
-FROM ubuntu
-
-RUN apt update && apt install -y curl
-
-WORKDIR /app
-
-COPY . .
-
-CMD ["bash"]
-
-# Build image
-docker build -t myapp .
-
-# Run image
-docker run -it myapp
-
-# --- Volumes ---
-docker volume create myvolume        # Create named volume
-docker volume ls                     # List volumes
-docker volume inspect myvolume       # Inspect volume
-docker volume rm myvolume            # Remove volume
-
-docker run -v myvolume:/data ubuntu  # Mount named volume
-docker run -v $(pwd):/app ubuntu     # Bind mount current dir
-
-# --- Networks ---
-docker network ls                    # List networks
-docker network create mynetwork      # Create network
-docker network inspect mynetwork     # Inspect network
-docker network rm mynetwork          # Remove network
-
-docker run --network mynetwork nginx # Connect container to network
-
-# --- Docker Compose ---
-docker compose up                    # Start services
-docker compose up -d                 # Detached mode
-docker compose down                  # Stop services
-docker compose restart               # Restart services
-docker compose logs                  # Show logs
-docker compose logs -f               # Follow logs
-docker compose ps                    # Show compose containers
-docker compose build                 # Build compose services
-docker compose pull                  # Pull latest images
-
-# --- compose.yaml Example ---
-# File: compose.yaml
-
-services:
-  db:
-    image: postgres
-    environment:
-      POSTGRES_PASSWORD: test
-
-  adminer:
-    image: adminer
-    ports:
-      - "8080:8080"
-
-# Start:
-docker compose up
-
-# --- Cleanup ---
-docker container prune               # Remove stopped containers
-docker image prune                   # Remove unused images
-docker volume prune                  # Remove unused volumes
-docker network prune                 # Remove unused networks
-
-docker system prune                  # Cleanup everything unused
-docker system prune -a --volumes     # Aggressive cleanup
-
-# --- Save & Export ---
-docker save -o image.tar myimage     # Export image
-docker load -i image.tar             # Import image
-
-docker export <container> > fs.tar   # Export container filesystem
-docker import fs.tar myimage         # Import filesystem as image
-
-# --- Resource Limits ---
-docker run --memory=512m ubuntu      # Limit RAM
-docker run --cpus=2 ubuntu           # Limit CPU cores
-
-# --- Useful Images ---
-docker run -it ubuntu bash           # Ubuntu shell
-docker run -it alpine sh             # Tiny Linux shell
-docker run -p 8080:80 nginx          # Web server
-docker run postgres                  # PostgreSQL
-docker run redis                     # Redis server
-docker run adminer                   # DB web UI
-
-# --- Registry / Docker Hub ---
-docker login                         # Login to Docker Hub
-docker logout                        # Logout
-docker search nginx                  # Search images
-
-# --- Multi-Architecture ---
-docker buildx ls                     # List buildx builders
-docker buildx create --use           # Create builder
-docker buildx build --platform linux/amd64 .
-
-# --- Advanced ---
-docker cp file.txt container:/tmp    # Copy file into container
-docker cp container:/tmp/file .      # Copy file from container
-
-docker diff <container>              # Show filesystem changes
-docker history <image>               # Show image layers
-
-docker events                        # Real-time Docker events
-
-
-# --- Best Learning Path ---
-# 1. docker run / ps / logs / exec
-# 2. volumes + ports
-# 3. Dockerfiles
-# 4. Docker Compose
-# 5. Networks
-# 6. Multi-container setups
-# 7. CI/CD + deployment
-
-# --- Great Practice Projects ---
-# nginx static website
-# Java REST API + PostgreSQL
-# Node + Redis
-# Fullstack app
-# Self-hosted services
-# Dev environments
-```
-## lazydocker
 ```bash
-curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+sudo dnf -y install dnf-plugins-core                    # DNF Plugin für Repository-Management installieren
+
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo # Offizielles Docker-Repo hinzufügen
+
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin              # Docker Engine + CLI + Plugins installieren
+
+sudo systemctl enable --now docker                      # Docker Dienst starten + beim Boot aktivieren
+systemctl status docker                                 # Status prüfen
+
+sudo usermod -aG docker $USER                           # User zur Docker-Gruppe hinzufügen (kein sudo mehr nötig)
+newgrp docker                                           # Gruppenrechte neu laden (ohne Logout)
+
+docker version                                          # Version anzeigen
+docker info                                             # Systeminformationen anzeigen
+```
+
+---
+
+## 🚀 Basic Workflow
+
+```bash
+docker run hello-world                                  # Testcontainer starten (Installation prüfen)
+docker ps                                               # Laufende Container anzeigen
+docker ps -a                                            # Alle Container anzeigen
+docker images                                           # Lokale Images anzeigen
+docker volume ls                                        # Volumes anzeigen
+docker network ls                                       # Netzwerke anzeigen
+```
+
+---
+
+## 🏃 Container starten & ausführen
+
+```bash
+docker run ubuntu                                       # Container starten (stoppt direkt wieder)
+docker run -it ubuntu bash                              # Interaktive Bash im Container
+docker run -it alpine sh                                # Minimale Shell (Alpine)
+
+docker run -d nginx                                     # Container im Hintergrund starten
+
+docker run --name myapp nginx                           # Container mit Namen starten
+docker run -p 8080:80 nginx                             # Port-Mapping: Host 8080 → Container 80
+
+docker run -v $(pwd):/app ubuntu                        # Verzeichnis in Container mounten
+
+docker run --rm ubuntu                                  # Container nach Stop automatisch löschen
+
+docker run -e MY_VAR=test ubuntu                        # Environment Variable setzen
+```
+
+---
+
+## 🕹️ Container Management
+
+```bash
+docker start <container>                                # Gestoppten Container starten
+docker stop <container>                                 # Container sauber stoppen
+docker restart <container>                              # Container neu starten
+docker kill <container>                                 # Sofort stoppen (hart)
+
+docker rm <container>                                   # Container löschen
+docker rm -f <container>                                # Container erzwingen löschen
+
+docker rename <old> <new>                               # Container umbenennen
+
+docker stats                                            # Live CPU/RAM Nutzung
+docker top <container>                                  # Prozesse im Container anzeigen
+```
+
+---
+
+## 🔍 Logs & Debugging
+
+```bash
+docker logs <container>                                 # Logs anzeigen
+docker logs -f <container>                              # Logs live verfolgen
+
+docker inspect <container>                              # Detaillierte JSON-Infos
+
+docker exec -it <container> bash                        # Shell in laufendem Container öffnen
+docker exec -it <container> sh                          # Alternative Shell
+
+docker attach <container>                               # Direkt an STDIN/STDOUT hängen
+```
+
+---
+
+## 🖼️ Images & Dockerfile
+
+### Beispiel Dockerfile
+
+```Dockerfile
+FROM ubuntu                                             # Basisimage
+RUN apt update && apt install -y curl                  # Paket installieren
+WORKDIR /app                                            # Arbeitsverzeichnis setzen
+COPY . .                                                # Dateien kopieren
+CMD ["bash"]                                            # Startkommando
+```
+
+### Image Befehle
+
+```bash
+docker pull nginx                                       # Image von Docker Hub laden
+docker build -t myimage .                              # Image bauen
+
+docker build -f Dockerfile.dev .                        # Anderes Dockerfile nutzen
+
+docker tag myimage myrepo/myimage                       # Image taggen (für Registry)
+
+docker push myrepo/myimage                              # Image hochladen
+
+docker rmi <image>                                      # Image löschen
+
+docker image prune                                      # Ungenutzte Images löschen
+docker image prune -a                                   # Alle ungenutzten löschen
+```
+
+---
+
+## 💾 Volumes & Netzwerke
+
+```bash
+# Volumes
+docker volume create myvolume                           # Volume erstellen
+docker volume inspect myvolume                          # Infos anzeigen
+docker volume rm myvolume                               # Volume löschen
+
+docker run -v myvolume:/data ubuntu                     # Volume mounten
+
+# Netzwerke
+docker network create mynetwork                         # Netzwerk erstellen
+docker network inspect mynetwork                        # Details anzeigen
+docker network rm mynetwork                             # Netzwerk löschen
+
+docker run --network mynetwork nginx                    # Container ins Netzwerk hängen
+```
+
+---
+
+## 🐙 Docker Compose
+
+```bash
+docker compose up                                       # Services starten
+docker compose up -d                                    # Im Hintergrund
+
+docker compose down                                     # Container stoppen + löschen
+docker compose restart                                  # Neustarten
+
+docker compose logs                                     # Logs anzeigen
+docker compose logs -f                                  # Live Logs
+
+docker compose ps                                       # Status anzeigen
+docker compose build                                    # Images neu bauen
+docker compose pull                                     # Images aktualisieren
+```
+
+---
+
+## 🧹 System Cleanup
+
+```bash
+docker container prune                                  # Gestoppte Container löschen
+docker volume prune                                     # Unbenutzte Volumes löschen
+docker network prune                                    # Unbenutzte Netzwerke löschen
+
+docker system prune                                     # Alles Unbenutzte löschen
+docker system prune -a --volumes                        # Aggressiver Cleanup
+```
+
+---
+
+## 📦 Import / Export & Advanced
+
+```bash
+docker save -o image.tar myimage                        # Image exportieren
+docker load -i image.tar                                # Image importieren
+
+docker export <container> > fs.tar                      # Container-Dateisystem exportieren
+docker import fs.tar myimage                            # Neues Image aus FS
+
+docker cp file.txt container:/tmp                       # Datei in Container kopieren
+docker cp container:/tmp/file .                         # Datei rauskopieren
+
+docker diff <container>                                 # Veränderungen anzeigen
+docker history <image>                                  # Image Layer anzeigen
+docker events                                           # Live Events streamen
+```
+
+---
+
+## 🏗️ Multi-Architecture Builds
+
+```bash
+docker buildx ls                                        # Builder anzeigen
+docker buildx create --use                              # Builder erstellen
+docker buildx build --platform linux/amd64 --load -t myimage:amd64 . # Cross-Build
+```
+
+---
+
+## 🧠 CLI Notes
+
+```bash
+# STRG+p + STRG+q → Container verlassen ohne zu stoppen
+# docker system df → Speicherverbrauch anzeigen
+# docker system prune → Cleanup
+# docker logs → Erste Debug-Anlaufstelle
 ```
