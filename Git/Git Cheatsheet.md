@@ -1,4 +1,9 @@
 
+### Repo erstellen (mit Abfrage)
+```bash 
+gh repo create
+```
+
 
 ```bash
 # --- Setup & Config ---

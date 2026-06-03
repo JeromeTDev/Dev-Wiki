@@ -2,207 +2,262 @@
 
 ```bash
 # =========================================================
-# Docker CLI Cheatsheet
-# Fedora / Linux / CLI-first Workflow
+# SETUP (Fedora)
 # =========================================================
 
-# --- Installation (Fedora) ---
 sudo dnf -y install dnf-plugins-core
 
-sudo dnf config-manager --add-repo \
+sudo dnf config-manager addrepo \
 https://download.docker.com/linux/fedora/docker-ce.repo
 
 sudo dnf install docker-ce docker-ce-cli containerd.io \
 docker-buildx-plugin docker-compose-plugin
 
-sudo systemctl enable --now docker   # Start Docker daemon
-systemctl status docker              # Check Docker status
+sudo systemctl enable --now docker
+systemctl status docker
 
-sudo usermod -aG docker $USER        # Use docker without sudo
-newgrp docker                        # Reload groups without logout
+sudo usermod -aG docker $USER
+newgrp docker
 
-docker version                       # Show Docker version
-docker info                          # Show Docker system info
+docker version
+docker info
 
-# --- Basic Workflow ---
-docker run hello-world               # Test Docker installation
-docker ps                            # Show running containers
-docker ps -a                         # Show all containers
-docker images                        # Show downloaded images
-docker volume ls                     # List volumes
-docker network ls                    # List networks
 
-# --- Running Containers ---
-docker run ubuntu                    # Run Ubuntu container
-docker run -it ubuntu bash           # Interactive Ubuntu shell
-docker run -it alpine sh             # Interactive Alpine shell
-docker run -d nginx                  # Run container detached
-docker run --name myapp nginx        # Assign container name
-docker run -p 8080:80 nginx          # Map ports
-docker run -v $(pwd):/app ubuntu     # Mount current directory
-docker run --rm ubuntu               # Auto-remove container
-docker run -e MY_VAR=test ubuntu     # Set environment variable
+# =========================================================
+# BASIC WORKFLOW
+# =========================================================
 
-# --- Container Management ---
-docker start <container>             # Start stopped container
-docker stop <container>              # Stop container
-docker restart <container>           # Restart container
-docker kill <container>              # Force kill container
-docker rm <container>                # Remove container
-docker rm -f <container>             # Force remove container
+docker run hello-world
+docker ps
+docker ps -a
+docker images
 
-docker rename <old> <new>            # Rename container
 
-docker stats                         # Live resource usage
-docker top <container>               # Show processes
+# =========================================================
+# RUNNING CONTAINERS
+# =========================================================
 
-# --- Logs & Debugging ---
-docker logs <container>              # Show logs
-docker logs -f <container>           # Follow logs live
-docker inspect <container>           # Detailed JSON info
-docker exec -it <container> bash     # Open shell in running container
-docker exec -it <container> sh       # Alpine shell
-docker attach <container>            # Attach terminal
+docker run ubuntu
+docker run -it ubuntu bash
+docker run -it alpine sh
 
-# --- Images ---
-docker pull nginx                    # Download image
-docker build -t myimage .            # Build image from Dockerfile
-docker build -f Dockerfile.dev .     # Use custom Dockerfile
-docker tag myimage myrepo/myimage    # Tag image
-docker push myrepo/myimage           # Push image to registry
+docker run -d nginx
+docker run --name myapp nginx
 
-docker rmi <image>                   # Remove image
-docker image prune                   # Remove dangling images
-docker image prune -a                # Remove unused images
+docker run -p 8080:80 nginx
+docker run -v $(pwd):/app ubuntu
 
-# --- Dockerfile ---
-# Example Dockerfile
+docker run --rm ubuntu
+docker run -e MY_VAR=test ubuntu
 
-FROM ubuntu
 
-RUN apt update && apt install -y curl
+# =========================================================
+# CONTAINER MANAGEMENT
+# =========================================================
 
-WORKDIR /app
+docker start <id>
+docker stop <id>
+docker restart <id>
+docker rm <id>
+docker rm -f <id>
 
-COPY . .
+docker rename <old> <new>
 
-CMD ["bash"]
+docker stats
+docker top <id>
 
-# Build image
-docker build -t myapp .
 
-# Run image
-docker run -it myapp
+# =========================================================
+# LOGS / DEBUGGING
+# =========================================================
 
-# --- Volumes ---
-docker volume create myvolume        # Create named volume
-docker volume ls                     # List volumes
-docker volume inspect myvolume       # Inspect volume
-docker volume rm myvolume            # Remove volume
+docker logs <id>
+docker logs -f <id>
 
-docker run -v myvolume:/data ubuntu  # Mount named volume
-docker run -v $(pwd):/app ubuntu     # Bind mount current dir
+docker exec -it <id> bash
+docker exec -it <id> sh
 
-# --- Networks ---
-docker network ls                    # List networks
-docker network create mynetwork      # Create network
-docker network inspect mynetwork     # Inspect network
-docker network rm mynetwork          # Remove network
+docker inspect <id>
 
-docker run --network mynetwork nginx # Connect container to network
 
-# --- Docker Compose ---
-docker compose up                    # Start services
-docker compose up -d                 # Detached mode
-docker compose down                  # Stop services
-docker compose restart               # Restart services
-docker compose logs                  # Show logs
-docker compose logs -f               # Follow logs
-docker compose ps                    # Show compose containers
-docker compose build                 # Build compose services
-docker compose pull                  # Pull latest images
+# =========================================================
+# IMAGES
+# =========================================================
 
-# --- compose.yaml Example ---
-# File: compose.yaml
+docker pull nginx
+docker build -t myimage .
+docker build -f Dockerfile.dev .
+
+docker images
+docker rmi <image>
+
+docker image prune
+docker image prune -a
+
+
+# =========================================================
+# VOLUMES
+# =========================================================
+
+docker volume ls
+docker volume create myvolume
+docker volume inspect myvolume
+docker volume rm myvolume
+
+docker run -v myvolume:/data ubuntu
+docker run -v $(pwd):/app ubuntu
+
+
+# =========================================================
+# NETWORKS
+# =========================================================
+
+docker network ls
+docker network create mynetwork
+docker network inspect mynetwork
+docker network rm mynetwork
+
+docker run --network mynetwork nginx
+
+
+# =========================================================
+# DOCKER COMPOSE (WICHTIG)
+# =========================================================
+
+docker compose up
+docker compose up -d
+docker compose down
+
+docker compose restart
+docker compose ps
+docker compose logs
+docker compose logs -f
+
+docker compose build
+docker compose pull
+
+
+# ---------------------------------------------------------
+# ⚠️ WICHTIG: Compose FILE LOCATION
+# ---------------------------------------------------------
+
+# Standard (im aktuellen Ordner):
+docker compose up
+
+# Wenn Datei NICHT im Root liegt:
+docker compose -f docker/compose.yml up -d
+
+docker compose -f docker/compose.yml logs -f n8n
+
+docker compose -f docker/compose.yml down
+
+
+# ---------------------------------------------------------
+# 💡 BEST PRACTICE: Alias (sehr empfohlen)
+# ---------------------------------------------------------
+
+# fish shell:
+alias dcd="docker compose -f docker/compose.yml"
+
+dcd up -d
+dcd logs -f n8n
+dcd down
+
+
+# =========================================================
+# COMPOSE EXAMPLE
+# =========================================================
 
 services:
   db:
     image: postgres
     environment:
       POSTGRES_PASSWORD: test
+    ports:
+      - "5432:5432"
 
   adminer:
     image: adminer
     ports:
       - "8080:8080"
 
-# Start:
-docker compose up
 
-# --- Cleanup ---
-docker container prune               # Remove stopped containers
-docker image prune                   # Remove unused images
-docker volume prune                  # Remove unused volumes
-docker network prune                 # Remove unused networks
+# =========================================================
+# CLEANUP
+# =========================================================
 
-docker system prune                  # Cleanup everything unused
-docker system prune -a --volumes     # Aggressive cleanup
+docker container prune
+docker image prune
+docker volume prune
+docker network prune
 
-# --- Save & Export ---
-docker save -o image.tar myimage     # Export image
-docker load -i image.tar             # Import image
-
-docker export <container> > fs.tar   # Export container filesystem
-docker import fs.tar myimage         # Import filesystem as image
-
-# --- Resource Limits ---
-docker run --memory=512m ubuntu      # Limit RAM
-docker run --cpus=2 ubuntu           # Limit CPU cores
-
-# --- Useful Images ---
-docker run -it ubuntu bash           # Ubuntu shell
-docker run -it alpine sh             # Tiny Linux shell
-docker run -p 8080:80 nginx          # Web server
-docker run postgres                  # PostgreSQL
-docker run redis                     # Redis server
-docker run adminer                   # DB web UI
-
-# --- Registry / Docker Hub ---
-docker login                         # Login to Docker Hub
-docker logout                        # Logout
-docker search nginx                  # Search images
-
-# --- Multi-Architecture ---
-docker buildx ls                     # List buildx builders
-docker buildx create --use           # Create builder
-docker buildx build --platform linux/amd64 .
-
-# --- Advanced ---
-docker cp file.txt container:/tmp    # Copy file into container
-docker cp container:/tmp/file .      # Copy file from container
-
-docker diff <container>              # Show filesystem changes
-docker history <image>               # Show image layers
-
-docker events                        # Real-time Docker events
+docker system prune
+docker system prune -a --volumes
 
 
-# --- Best Learning Path ---
+# =========================================================
+# SAVE / EXPORT
+# =========================================================
+
+docker save -o image.tar myimage
+docker load -i image.tar
+
+docker export <container> > fs.tar
+docker import fs.tar myimage
+
+
+# =========================================================
+# RESOURCE LIMITS
+# =========================================================
+
+docker run --memory=512m ubuntu
+docker run --cpus=2 ubuntu
+
+
+# =========================================================
+# USEFUL IMAGES
+# =========================================================
+
+docker run -it ubuntu bash
+docker run -it alpine sh
+docker run -p 8080:80 nginx
+docker run postgres
+docker run redis
+docker run adminer
+
+
+# =========================================================
+# REGISTRY
+# =========================================================
+
+docker login
+docker logout
+docker search nginx
+
+
+# =========================================================
+# ADVANCED
+# =========================================================
+
+docker cp file container:/tmp
+docker cp container:/tmp/file .
+
+docker diff <container>
+docker history <image>
+docker events
+
+
+# =========================================================
+# LEARNING PATH
+# =========================================================
+
 # 1. docker run / ps / logs / exec
 # 2. volumes + ports
-# 3. Dockerfiles
+# 3. Dockerfile
 # 4. Docker Compose
 # 5. Networks
-# 6. Multi-container setups
-# 7. CI/CD + deployment
-
-# --- Great Practice Projects ---
-# nginx static website
-# Java REST API + PostgreSQL
-# Node + Redis
-# Fullstack app
-# Self-hosted services
-# Dev environments
+# 6. Multi-container apps
+# 7. DevOps / CI/CD
 ```
 ## lazydocker
 ```bash
