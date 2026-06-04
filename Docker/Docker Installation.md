@@ -112,6 +112,52 @@ docker image prune                             # Ungenutzte Images löschen
 docker image prune -a                          # Alle ungenutzten löschen
 ```
 
+
+## 📦 Image Distribution (Offline)
+
+```bash
+# Lokales Image erstellen
+docker build -t myapp:1.0 .
+
+# Vorhandene Images anzeigen
+docker images
+
+# Image als Datei exportieren
+docker save -o myapp.tar myapp:1.0
+
+# Image auf anderem Rechner importieren
+docker load -i myapp.tar
+
+# Prüfen, ob das Image vorhanden ist
+docker images
+
+# Container aus importiertem Image starten
+docker run myapp:1.0
+```
+
+### Typischer Workflow
+
+1. Anwendung mit Dockerfile bauen:
+    ```bash
+    docker build -t myapp:1.0 .
+    ```
+2. Image exportieren:
+    ```bash
+    docker save -o myapp.tar myapp:1.0
+    ```
+3. `myapp.tar` per USB-Stick, SCP, NAS oder Cloud übertragen.
+4. Auf dem Zielsystem importieren:
+    ```bash
+    docker load -i myapp.tar
+    ```
+5. Container starten:
+    ```bash
+    docker run myapp:1.0
+    ```
+
+> Docker Hub oder eine Registry sind dafür nicht erforderlich. Images können vollständig lokal erstellt, exportiert und verteilt werden.
+
+
 ---
 
 ## 💾 Volumes & Netzwerke
