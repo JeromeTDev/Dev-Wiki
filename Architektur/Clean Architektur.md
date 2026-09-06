@@ -66,13 +66,13 @@ lib/
 
 ### **Zusammenfassung der Architektur**
 
-|   |   |
-|---|---|
-|**Schicht**|**Verantwortung**|
-|**Präsentations-Schicht**|Zeigt die Benutzeroberfläche an und reagiert auf Benutzerinteraktionen.|
-|**Anwendungs-Schicht**|Verarbeitet die Anwendungslogik und steuert die Verwendung von Use-Cases.|
-|**Domänen-Schicht**|Enthält die Geschäftslogik und Entitäten der Anwendung.|
-|**Daten-Schicht**|Stellt den Zugriff auf externe Datenquellen wie APIs und Datenbanken bereit.|
+|                           |                                                                              |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| **Schicht**               | **Verantwortung**                                                            |
+| **Präsentations-Schicht** | Zeigt die Benutzeroberfläche an und reagiert auf Benutzerinteraktionen.      |
+| **Anwendungs-Schicht**    | Verarbeitet die Anwendungslogik und steuert die Verwendung von Use-Cases.    |
+| **Domänen-Schicht**       | Enthält die Geschäftslogik und Entitäten der Anwendung.                      |
+| **Daten-Schicht**         | Stellt den Zugriff auf externe Datenquellen wie APIs und Datenbanken bereit. |
 
 Beispiel: 
 

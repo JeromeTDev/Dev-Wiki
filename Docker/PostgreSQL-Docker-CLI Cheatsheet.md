@@ -1,9 +1,9 @@
-|Begriff|Bedeutung|
-|---|---|
-|Database|Container für Tabellen|
-|Relation|Tabelle|
-|Row|Datensatz|
-|Column|Feld|
+| Begriff  | Bedeutung              |
+| -------- | ---------------------- |
+| Database | Container für Tabellen |
+| Relation | Tabelle                |
+| Row      | Datensatz              |
+| Column   | Feld                   |
 ### ENTITY CONTEXT
 
 - n8n: workflow automation platform
