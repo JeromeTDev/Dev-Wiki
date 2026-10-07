@@ -37,6 +37,7 @@ git branch                          # List branches
 git branch <name>                   # Create new branch
 git checkout/switch <name>          # Switch to branch
 git checkout -b/switch -c <name>    # Create + switch branch
+git switch -c <name>               # Create + switch; uncommitted changes bleiben erhalten
 git merge <branch>                  # Merge branch into current
 git rebase <branch>                 # Rebase onto another branch
 git branch -d <name>                # Delete local branch
@@ -58,6 +59,15 @@ git pull --rebase                   # Pull with rebase
 git fetch                           # Fetch branches/tags
 git fetch --prune                   # Remove deleted remotes
 
+# In Azure DevOps angelegten Branch lokal auschecken:
+git fetch origin
+git switch --track origin/<branch-name> # Remote-Branch auschecken und Tracking einrichten
+# Uncommittete Änderungen bleiben beim Wechsel normalerweise erhalten.
+# Falls Git den Wechsel wegen Änderungen blockiert:
+git stash                           # Änderungen kurz weglegen
+git switch --track origin/<branch-name>
+git stash pop                       # Änderungen auf den neuen Branch zurückholen
+
 # --- Undo & Fix ---
 git checkout -- <file>              # Discard local changes
 git restore <file>                  # Discard local changes
@@ -76,6 +86,13 @@ git stash pop                       # Apply last stash
 git stash list                      # Show stash list
 git stash apply stash@{n}           # Apply specific stash
 git stash drop stash@{n}            # Remove specific stash
+
+# Bereits vorhandene Änderungen auf einen neuen Branch mitnehmen:
+git switch -c <name>                # Änderungen bleiben erhalten; kein Stash nötig
+# Stash nur verwenden, wenn der Wechsel sonst blockiert oder Änderungen kurz weggelegt werden sollen:
+git stash                           # Änderungen weglegen
+git switch -c <name>                # Neuen Branch erstellen und wechseln
+git stash pop                       # Änderungen wiederherstellen
 
 # --- Tags ---
 git tag <tag>                       # Create tag
